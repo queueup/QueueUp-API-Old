@@ -1,0 +1,20 @@
+version: '2'
+services:
+  queueup-db:
+    image: postgres:9.6
+    container_name: queueup-db
+    environment:
+      POSTGRES_DB: queueup_development
+      POSTGRES_USER: queueup
+      POSTGRES_PASSWORD: 
+    ports:
+      - 6003:5432/tcp
+  queueup-db-test:
+    image: postgres:9.6
+    container_name: queueup-db-test
+    environment:
+      POSTGRES_DB: queueup_test
+      POSTGRES_USER: queueup
+      POSTGRES_PASSWORD: 
+    ports:
+      - 6004:5432/tcp

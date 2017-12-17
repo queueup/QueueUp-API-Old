@@ -1,0 +1,16 @@
+user_s = User.create(email: 'sofiane@qup.com', password: '12345678', password_confirmation: '12345678')
+LeagueProfile.create!(summoner_name: 'SofianeLeFragile', region: 'euw', user: user_s)
+CommunicationDatum.create(type: 'skype', user: user_s, value: 'sofiane')
+user_d = User.create(email: 'damien@qup.com', password: '12345678', password_confirmation: '12345678')
+LeagueProfile.create(summoner_name: 'Tekbird', region: 'euw', user: user_d)
+CommunicationDatum.create(type: 'discord', user: user_d, value: 'sofiane')
+user_t = User.create(email: 'thomas@qup.com', password: '12345678', password_confirmation: '12345678')
+CommunicationDatum.create(type: 'teamspeak', user: user_t, value: 'sofiane')
+LeagueProfile.create(summoner_name: 'LeBoulet02', region: 'euw', user: user_t)
+user_r = User.create(email: 'remi@qup.com', password: '12345678', password_confirmation: '12345678')
+LeagueProfile.create(summoner_name: 'remi5151', region: 'euw', user: user_r)
+
+match_d = LeagueMatch.create(swiper: user_s.league_profile, target: user_d.league_profile)
+match_t = LeagueMatch.create(swiper: user_s.league_profile, target: user_t.league_profile)
+
+LeagueMessage.create(league_match: match_d, content: 'This is a random message', league_profile: user_d.league_profile)

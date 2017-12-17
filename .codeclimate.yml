@@ -1,0 +1,31 @@
+version: "2"
+plugins:
+  brakeman:
+    enabled: true
+  csslint:
+    enabled: true
+    exclude_patterns:
+    - coverage/
+  duplication:
+    enabled: false
+    config:
+      languages:
+      - ruby
+      - javascript
+    exclude_patterns:
+    - config/
+    - db/
+    - spec/
+  eslint:
+    enabled: true
+    exclude_patterns:
+    - coverage/
+  rubocop:
+    enabled: true
+    exclude_patterns:
+    - bin/
+    - config/
+    - db/
+    - spec/
+  structure:
+    enabled: false
