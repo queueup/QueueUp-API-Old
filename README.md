@@ -1,6 +1,6 @@
 # QueueUp League of Legends Mobile App
 
-[![Travis CI](https://img.shields.io/travis/queue-up/QueueUp-API.svg?style=flat-square)](https://travis-ci.org/queue-up/QueueUp-API) [![CodeClimate maintenability](https://img.shields.io/codeclimate/maintainability/queue-up/QueueUp-API.svg?style=flat-square)](https://codeclimate.com/github/queue-up/QueueUp-API)
+[![Build Status](https://travis-ci.org/queue-up/QueueUp-API.svg)](https://travis-ci.org/queue-up/QueueUp-API) [![Maintainability](https://api.codeclimate.com/v1/badges/d1f2aab9042eb543b61a/maintainability)](https://codeclimate.com/github/queue-up/QueueUp-API/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/d1f2aab9042eb543b61a/test_coverage)](https://codeclimate.com/github/queue-up/QueueUp-API/test_coverage)
 
 ## Installation
 
