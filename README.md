@@ -1,4 +1,4 @@
-# QueueUp League of Legends Mobile App
+# QueueUp API
 
 [![Build Status](https://travis-ci.org/queue-up/QueueUp-API.svg)](https://travis-ci.org/queue-up/QueueUp-API) [![Maintainability](https://api.codeclimate.com/v1/badges/d1f2aab9042eb543b61a/maintainability)](https://codeclimate.com/github/queue-up/QueueUp-API/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/d1f2aab9042eb543b61a/test_coverage)](https://codeclimate.com/github/queue-up/QueueUp-API/test_coverage)
 
