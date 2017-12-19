@@ -47,6 +47,6 @@ class LeagueProfilesController < ApplicationController
     end
     
     def league_profile_update_params
-      params.permit(:champions => [], :goals => [], :roles => [], :locales => [])
+      params.permit(:description, :champions => [], :goals => [], :roles => [], :locales => [])
     end
 end
