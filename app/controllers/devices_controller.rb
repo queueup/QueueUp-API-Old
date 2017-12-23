@@ -8,12 +8,14 @@ class DevicesController < ApplicationController
   end
 
   def create
-    @device = Device.where(device_params).where(user: @current_user).first_or_create
+    @device = Device.where(device_params).first_or_create do |device|
+      device.user = @current_user
+    end
     render json: @device
   end
 
   def destroy
-    Device.where(device_params).where(user: @current_user).first_or_create.destroy
+    Device.where(device_params).first_or_create.destroy
     render body: nil
   end
 

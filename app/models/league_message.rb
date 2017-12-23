@@ -5,6 +5,6 @@ class LeagueMessage < ApplicationRecord
   after_create :send_push_notification
 
   def send_push_notification
-    NotificationApi.create_message_notification(self)
+    LeagueMessageNotification.new(self)
   end
 end
