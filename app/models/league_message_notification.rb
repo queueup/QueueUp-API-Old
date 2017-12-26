@@ -1,51 +1,59 @@
 class LeagueMessageNotification < NotificationApi
   def initialize(message)
     @message = message
-    set_pending_notifications
-    cancel
+    @verb = "league:message:new:#{@message.league_match.id}"
+    @user = @message.league_match.swiper_id == @message.league_profile_id ?
+      @message.league_match.target.user :
+      @message.league_match.swiper.user
+    cancel_previous_notifications
     create
   end
 
   def create
     Pusher.trigger("chat-#{@message.league_match.id}", 'new_message', @message)
-    unless target_devices.empty?
+    unless get_devices.empty?
       if @pending_notifications.empty?
         notification_id = create_notification({
-          headings: { en: "New message from #{@message.league_profile.summoner_name} !" },
-          contents: { en: @message.content },
-          include_player_ids: target_devices,
-        }) 
+          headings: {
+            de: "Neue Nachricht von #{@message.league_profile.summoner_name}",
+            en: "New message from #{@message.league_profile.summoner_name}",
+            fr: "Nouveau message de #{@message.league_profile.summoner_name}",
+            nl: "Nieuw bericht van #{@message.league_profile.summoner_name}",
+            ru: "Новое сообщение от #{@message.league_profile.summoner_name}"
+          },
+          contents: {
+            de: @message.content,
+            en: @message.content,
+            fr: @message.content,
+            nl: @message.content,
+            ru: @message.content
+          },
+          include_player_ids: get_devices,
+          ios_badgeType: 'Increase',
+          ios_badgeCount: 1,
+          collapse_id: @verb
+        })
       else
         notification_id = create_notification({
-          headings: { en: "New messages from your matches !" },
-          contents: { en: "#{@pending_notifications.size + 1} new messages" },
-          include_player_ids: target_devices,
+          headings: {
+            de: "Neue Nachrichten von #{@message.league_profile.summoner_name}",
+            en: "New messages from #{@message.league_profile.summoner_name}",
+            fr: "Nouveaux messages de #{@message.league_profile.summoner_name}",
+            nl: "Nieuwe berichten van #{@message.league_profile.summoner_name}",
+            ru: "Новые сообщения от #{@message.league_profile.summoner_name}"
+          },
+          contents: {
+            de: "#{count_canceled_notifications + 1} neue Nachrichten",
+            en: "#{count_canceled_notifications + 1} new messages",
+            fr: "#{count_canceled_notifications + 1} nouveaux messages",
+            nl: "#{count_canceled_notifications + 1} nieuwe berichten",
+            ru: "#{count_canceled_notifications + 1} новых сообщений"
+          },
+          include_player_ids: get_devices,
+          collapse_id: @verb
         }) 
       end
     end
-    Notification.create(user: target_user, verb: 'league:message:new', status: :pending, signal_id: notification_id || nil)
-  end
-
-  # Cancel all notifications already issued for the same user
-  def cancel
-    @pending_notifications.each do |notification|
-      cancel_notification(notification.signal_id) unless notification.signal_id.nil?
-      notification.update(status: :canceled)
-    end
-  end
-
-  private
-  def target_devices
-    target_user.devices.pluck(:user_token)
-  end
-
-  def target_user
-    @message.league_match.swiper_id == @message.league_profile_id ?
-      @message.league_match.target.user :
-      @message.league_match.swiper.user
-  end
-
-  def set_pending_notifications
-    @pending_notifications = Notification.pending.where(user: target_user, verb: 'league:message:new')
+    Notification.create(user: @user, verb: @verb, status: :pending, signal_id: notification_id || nil)
   end
 end

@@ -5,15 +5,15 @@ RSpec.describe LeagueMessageNotification, type: :model do
     match = create(:league_match)
     target = match.target
     swiper = match.swiper
-    create(:league_message, league_match: match, league_profile: swiper)
-    expect(target.user.notifications.new_league_message.size).to eq(1)
-    create(:league_message, league_match: match, league_profile: swiper)
-    expect(target.user.notifications.new_league_message.size).to eq(2)
-    expect(target.user.notifications.new_league_message.pending.size).to eq(1)
-    expect(target.user.notifications.new_league_message.canceled.size).to eq(1)
-    create(:league_message, league_match: match, league_profile: swiper)
-    expect(target.user.notifications.new_league_message.size).to eq(3)
-    expect(target.user.notifications.new_league_message.pending.size).to eq(1)
-    expect(target.user.notifications.new_league_message.canceled.size).to eq(2)
+    message = create(:league_message, league_match: match, league_profile: swiper)
+    expect(target.user.notifications.new_league_message(message).size).to eq(1)
+    message = create(:league_message, league_match: match, league_profile: swiper)
+    expect(target.user.notifications.new_league_message(message).size).to eq(2)
+    expect(target.user.notifications.new_league_message(message).pending.size).to eq(1)
+    expect(target.user.notifications.new_league_message(message).canceled.size).to eq(1)
+    message = create(:league_message, league_match: match, league_profile: swiper)
+    expect(target.user.notifications.new_league_message(message).size).to eq(3)
+    expect(target.user.notifications.new_league_message(message).pending.size).to eq(1)
+    expect(target.user.notifications.new_league_message(message).canceled.size).to eq(2)
   end
 end
