@@ -41,7 +41,6 @@ class NotificationApi
   end
 
   def get_devices
-    puts @user.devices.pluck(:user_token)
     @user.devices.pluck(:user_token)
   end
 end
