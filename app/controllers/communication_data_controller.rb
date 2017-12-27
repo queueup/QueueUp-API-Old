@@ -9,7 +9,6 @@ class CommunicationDataController < ApplicationController
   end
 
   def update
-    puts params
     if @communication_datum.update(communication_datum_params)
       render json: @communication_datum
     else

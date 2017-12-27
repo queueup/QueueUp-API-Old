@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_one :league_profile
   has_many :communication_data
   has_many :devices
+  has_many :notifications
         
   after_initialize :set_default_values
 
