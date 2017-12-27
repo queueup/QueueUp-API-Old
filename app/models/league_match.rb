@@ -16,6 +16,6 @@ class LeagueMatch < ApplicationRecord
   end
 
   def create_notifications
-    NotificationApi.create_match_notification(self)
+    LeagueMatchNotification.new(self)
   end
 end
