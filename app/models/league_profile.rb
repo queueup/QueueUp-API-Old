@@ -6,24 +6,30 @@ class LeagueProfile < ApplicationRecord
   serialize :roles
 
   belongs_to :user
+  has_many :league_positions
 
   after_initialize :set_default_values
   before_validation :set_api_summoner
   before_create :set_initial_data
+  after_create :update_ranked_data
 
   validates :summoner_name, presence: true, uniqueness: true
   validates :summoner_id, presence: true, uniqueness: true
   validates :region, presence: true
 
   def update_ranked_data
-    return self.ranked_data if self.riot_updated_at > Time.now - 1.day
+    # return self.league_positions if self.riot_updated_at > Time.now - 1.day
+
+    self.league_positions.destroy_all #Destroy the old records
+
     l = LeagueApi.new(
       summoner_name: self.summoner_name,
       region: self.region,
       summoner_id: self.summoner_id
     )
     self.riot_updated_at = Time.now
-    self.ranked_data = l.get_ranked_data
+
+    LeaguePosition.create_from_ranked_data(l.get_ranked_data, self.id)
   end
 
   def league_matches
@@ -37,7 +43,6 @@ class LeagueProfile < ApplicationRecord
       region: self.region,
       summoner_id: self.summoner_id
     )
-    self.riot_updated_at = Time.now
     self.summoner_id ||= l.summoner_id
   end
 
@@ -48,12 +53,10 @@ class LeagueProfile < ApplicationRecord
       summoner_id: self.summoner_id
     )
     self.riot_updated_at = Time.now
-    self.ranked_data = l.get_ranked_data
     self.champions = l.get_champions
   end
 
   def set_default_values
-    self.ranked_data  ||= []
     self.champions    ||= []
     self.roles        ||= []
     self.goals        ||= []

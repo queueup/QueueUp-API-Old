@@ -31,7 +31,7 @@ class LeagueProfilesController < ApplicationController
   def ranked_data
     league_profile.update_ranked_data
     if league_profile.save
-      render json: league_profile
+      render json: league_profile, include: 'league_profiles'
     else
       render json: league_profile.errors, status: :unprocessable_entity
     end

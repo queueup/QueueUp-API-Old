@@ -16,7 +16,7 @@ class LeagueSuggestionsController < ApplicationController
     # "Pagination"
     @league_profiles = @league_profiles.first(10)
 
-    render json: @league_profiles, each_serializer: LeagueSuggestionSerializer
+    render json: @league_profiles, include: '**', each_serializer: LeagueSuggestionSerializer
   end
 
   def accept

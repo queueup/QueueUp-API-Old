@@ -1,5 +1,5 @@
 class LeagueSuggestionSerializer < ActiveModel::Serializer
-  belongs_to :league_profile
+  belongs_to :league_profile, serializer: LeagueProfileSerializer
   has_many :communication_data
 
   def league_profile
