@@ -23,6 +23,8 @@ gem 'httparty', '~> 0.15.6'
 
 gem 'pusher'
 
+gem 'mailjet'
+
 group :development, :test do
 end
 

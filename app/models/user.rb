@@ -11,6 +11,8 @@ class User < ApplicationRecord
         
   after_initialize :set_default_values
 
+  after_create :send_email
+
   def sign_in
     self.tokens.push({
       key: SecureRandom.uuid,
@@ -22,5 +24,21 @@ class User < ApplicationRecord
 
   def set_default_values
     self.tokens ||= []
+  end
+
+  private
+  def send_email
+    return if Rails.env === 'test'
+    Mailjet::Send.create(messages: [{
+      'From'=> {
+        'Email'=> ENV['MAILJET_API_DEFAULT_FROM'],
+        'Name'=> ENV['MAILJET_API_DEFAULT_FROM_TEXT']
+      },
+      'To'=> [{ 'Email'=> self.email }],
+      'TemplateID'=> ENV['MAILJET_API_WELCOME_TEMP_ID'],
+      'TemplateLanguage'=> true,
+      'Subject'=> "Welcome aboard !"
+    }])
+    Mailjet::Contact_managemanycontacts.create(contacts_lists: [{ListID: ENV['MAILJET_API_LIST_ID'], action: "addnoforce"}], contacts: [{Email: self.email}])
   end
 end

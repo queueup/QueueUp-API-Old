@@ -1,0 +1,8 @@
+{
+  "name": "queueup-api",
+  "version": "1.0.0",
+  "description": "QueueUp API!",
+  "dependencies": {
+    "mjml": "^3.3.5"
+  }
+}
