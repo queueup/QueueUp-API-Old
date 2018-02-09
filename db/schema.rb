@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171222130000) do
+ActiveRecord::Schema.define(version: 20180116184652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,20 +53,39 @@ ActiveRecord::Schema.define(version: 20171222130000) do
     t.index ["league_profile_id"], name: "index_league_messages_on_league_profile_id"
   end
 
+  create_table "league_positions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "league_profile_id"
+    t.string "rank"
+    t.string "queue_type"
+    t.boolean "hot_streak"
+    t.integer "wins"
+    t.boolean "veteran"
+    t.integer "losses"
+    t.boolean "fresh_blood"
+    t.string "league_id"
+    t.string "player_or_team_name"
+    t.boolean "inactive"
+    t.string "player_or_team_id"
+    t.string "league_name"
+    t.string "tier"
+    t.integer "league_points"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "league_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "summoner_name"
     t.string "summoner_id"
     t.string "region"
-    t.text "ranked_data"
-    t.string "roles"
-    t.string "goals"
-    t.string "champions"
     t.datetime "riot_updated_at"
     t.uuid "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "locales", default: "--- []\n"
     t.string "description", default: ""
+    t.text "champions", default: [], array: true
+    t.text "goals", default: [], array: true
+    t.text "locales", default: [], array: true
+    t.text "roles", default: [], array: true
     t.index ["user_id"], name: "index_league_profiles_on_user_id"
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LeagueMatchSerializer < ActiveModel::Serializer
   attributes :id
 
@@ -8,7 +10,7 @@ class LeagueMatchSerializer < ActiveModel::Serializer
   def league_profile
     object.swiper_id == scope[:current_user].league_profile.id ? object.target : object.swiper
   end
-  
+
   def communication_data
     league_profile.user.communication_data
   end

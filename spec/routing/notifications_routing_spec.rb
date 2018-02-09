@@ -1,7 +1,8 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-RSpec.describe NotificationsController, type: :routing do
-  describe "routing" do
+require 'rails_helper'
 
-  end
-end
+# RSpec.describe NotificationsController, type: :routing do
+#   describe 'routing' do
+#   end
+# end

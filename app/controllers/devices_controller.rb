@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DevicesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_device, only: [:create]
@@ -19,6 +21,7 @@ class DevicesController < ApplicationController
   end
 
   private
+
   def device_params
     params.require(:device).permit(:push_token, :user_token)
   end
