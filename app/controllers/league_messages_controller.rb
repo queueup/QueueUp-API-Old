@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LeagueMessagesController < ApplicationController
   before_action :authenticate_user!
 
@@ -19,6 +21,7 @@ class LeagueMessagesController < ApplicationController
   end
 
   private
+
   def league_message_params
     params.permit(:content, :league_match_id)
   end

@@ -1,9 +1,12 @@
-class LeagueProfileSerializer < ActiveModel::Serializer
-  attributes :id, :summoner_name, :region, :champions, :roles, :goals, :locales, :description
+# frozen_string_literal: true
 
-  has_many :ranked_data
+class LeagueProfileSerializer < ActiveModel::Serializer
+  attributes :id, :summoner_name, :region, :champions, :roles, :goals, :locales, :description, :ranked_data
 
   def ranked_data
-    object.league_positions
+    ActiveModelSerializers::SerializableResource.new(
+      object.league_positions,
+      each_serializer: LeaguePositionSerializer
+    )
   end
 end

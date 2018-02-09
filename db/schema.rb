@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171231111325) do
+ActiveRecord::Schema.define(version: 20180116184652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,15 +77,15 @@ ActiveRecord::Schema.define(version: 20171231111325) do
     t.string "summoner_name"
     t.string "summoner_id"
     t.string "region"
-    t.string "roles"
-    t.string "goals"
-    t.string "champions"
     t.datetime "riot_updated_at"
     t.uuid "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "locales", default: "--- []\n"
     t.string "description", default: ""
+    t.text "champions", default: [], array: true
+    t.text "goals", default: [], array: true
+    t.text "locales", default: [], array: true
+    t.text "roles", default: [], array: true
     t.index ["user_id"], name: "index_league_profiles_on_user_id"
   end
 

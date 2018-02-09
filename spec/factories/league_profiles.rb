@@ -1,4 +1,6 @@
-summoner_names = %w(
+# frozen_string_literal: true
+
+summoner_names = %w[
   SofianeLeFragile
   remi5151
   leboulet02
@@ -9,7 +11,7 @@ summoner_names = %w(
   Rynua
   cedouc
   Mykon
-)
+]
 
 FactoryBot.define do
   factory :league_profile do

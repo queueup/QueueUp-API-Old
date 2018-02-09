@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LeagueProfilesController < ApplicationController
   before_action :authenticate_user!
 
@@ -38,15 +40,16 @@ class LeagueProfilesController < ApplicationController
   end
 
   private
-    def league_profile
-      @current_user.league_profile
-    end
 
-    def league_profile_create_params
-      params.permit(:summoner_name, :region)
-    end
-    
-    def league_profile_update_params
-      params.permit(:description, :champions => [], :goals => [], :roles => [], :locales => [])
-    end
+  def league_profile
+    @current_user.league_profile
+  end
+
+  def league_profile_create_params
+    params.permit(:summoner_name, :region)
+  end
+
+  def league_profile_update_params
+    params.permit(:description, champions: [], goals: [], roles: [], locales: [])
+  end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LeagueMessage < ApplicationRecord
   belongs_to :league_profile
   belongs_to :league_match
