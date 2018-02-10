@@ -45,7 +45,7 @@ class LeagueProfilesController < ApplicationController
   end
 
   def discord
-    render json: @league_profile
+    render json: @league_profile, include: 'league_profiles'
   end
 
   def discord_update
@@ -69,7 +69,7 @@ class LeagueProfilesController < ApplicationController
   end
 
   def set_by_discord
-    LeagueProfile.custom_find_by_discord(params[:id])
+    @league_profile = LeagueProfile.custom_find_by_discord(params[:id])
   end
 
   def league_profile_create_params
