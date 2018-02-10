@@ -29,6 +29,10 @@ Rails.application.routes.draw do
     patch :ranked_data, on: :collection
   end
 
+  post 'lfg_league_profiles/by_discord/:id', to: 'lfg_league_profiles#discord'
+  post 'lfg_league_profiles/by_summoner_name/:region/:summoner_name', to: 'lfg_league_profiles#summoner_name'
+  resources :lfg_league_profiles, only: [:index]
+
   resources :league_suggestions, only: [:index] do
     patch :accept, on: :member
     patch :decline, on: :member

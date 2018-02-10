@@ -45,7 +45,7 @@ class LeagueProfilesController < ApplicationController
   end
 
   def discord
-    render json: @communication_datum.user.league_profile
+    render json: @league_profile
   end
 
   def discord_update
@@ -58,9 +58,7 @@ class LeagueProfilesController < ApplicationController
   end
 
   def summoner_name
-    @league_profile = LeagueProfile.where(
-      'LOWER(summoner_name) = ? AND LOWER(region) = ?', params[:summoner_name].downcase, params[:region].downcase
-    ).first_or_create(league_profile_create_params)
+    @league_profile = LeagueProfile.custom_find_by_summoner(params[:region], params[:summoner_name])
     render json: @league_profile
   end
 
@@ -71,8 +69,7 @@ class LeagueProfilesController < ApplicationController
   end
 
   def set_by_discord
-    @communication_datum = CommunicationDatum.find_by!(type: :discord, value: params[:id])
-    @league_profile = @communication_datum.user.league_profile
+    LeagueProfile.custom_find_by_discord(params[:id])
   end
 
   def league_profile_create_params

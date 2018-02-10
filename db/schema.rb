@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180116184652) do
+ActiveRecord::Schema.define(version: 20180210100504) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,13 @@ ActiveRecord::Schema.define(version: 20180116184652) do
     t.index ["target_id"], name: "index_league_responses_on_target_id"
   end
 
+  create_table "lfg_league_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "league_profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_profile_id"], name: "index_lfg_league_profiles_on_league_profile_id"
+  end
+
   create_table "notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "signal_id"
     t.string "verb"
@@ -128,4 +135,5 @@ ActiveRecord::Schema.define(version: 20180116184652) do
   end
 
   add_foreign_key "communication_data", "users"
+  add_foreign_key "lfg_league_profiles", "league_profiles"
 end
