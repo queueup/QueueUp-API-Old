@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LeagueProfile < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
   has_many :league_positions, dependent: :destroy
 
   after_initialize :set_default_values
