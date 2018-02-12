@@ -6,7 +6,7 @@
   "repository": "https://github.com/queue-up/queueup-api",
   "logo": "http://queueup.gg/assets/img/favicon.ico",
   "scripts": {
-    "postdeploy": "bundle exec rake db:migrate"
+    "postdeploy": "bundle exec rake db:schema:load db:seed"
   },
   "env": {
     "LANG": {
