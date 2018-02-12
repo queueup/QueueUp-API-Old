@@ -8,7 +8,7 @@ class LfgLeagueProfilesController < ApplicationController
     @lfg_league_profiles = @lfg_league_profiles.includes(:league_profile)
     @lfg_league_profiles = @lfg_league_profiles.references(:league_profile)
     if params[:region].present?
-      @lfg_league_profiles = @lfg_league_profiles.where(region: params[:region])
+      @lfg_league_profiles = @lfg_league_profiles.where('LOWER(league_profiles.region) = LOWER(?)', params[:region])
     end
 
     render json: @lfg_league_profiles
