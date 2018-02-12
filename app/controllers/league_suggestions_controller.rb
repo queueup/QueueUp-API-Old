@@ -5,7 +5,7 @@ class LeagueSuggestionsController < ApplicationController
 
   def index
     # Remove current_user profiles
-    @league_profiles = LeagueProfile.where('user_id IS NOT NULL AND user_id != ?', @current_user.id)
+    @league_profiles = LeagueProfile.where.not(user_id: [nil, @current_user.id])
     # Select current region
     @league_profiles = @league_profiles.where('lower(region) = ?', league_profile.region.downcase)
     # Remove already answered

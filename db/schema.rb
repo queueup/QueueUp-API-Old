@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180210100504) do
+ActiveRecord::Schema.define(version: 20180210154909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,15 @@ ActiveRecord::Schema.define(version: 20180210100504) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_devices_on_user_id"
+  end
+
+  create_table "discord_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "communication_datum_id"
+    t.uuid "league_profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["communication_datum_id"], name: "index_discord_users_on_communication_datum_id"
+    t.index ["league_profile_id"], name: "index_discord_users_on_league_profile_id"
   end
 
   create_table "league_matches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -135,5 +144,7 @@ ActiveRecord::Schema.define(version: 20180210100504) do
   end
 
   add_foreign_key "communication_data", "users"
+  add_foreign_key "discord_users", "communication_data"
+  add_foreign_key "discord_users", "league_profiles"
   add_foreign_key "lfg_league_profiles", "league_profiles"
 end

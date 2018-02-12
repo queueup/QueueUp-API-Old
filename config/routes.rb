@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     delete :destroy, on: :collection
   end
 
+  resources :discord_users, only: %i[show update]
+
   resources :notifications, only: [] do
     delete :destroy, on: :collection
   end
@@ -30,7 +32,6 @@ Rails.application.routes.draw do
   end
 
   post 'lfg_league_profiles/by_discord/:id', to: 'lfg_league_profiles#discord'
-  post 'lfg_league_profiles/by_summoner_name/:region/:summoner_name', to: 'lfg_league_profiles#summoner_name'
   resources :lfg_league_profiles, only: [:index]
 
   resources :league_suggestions, only: [:index] do

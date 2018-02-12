@@ -2,6 +2,7 @@
 
 class LeagueProfilesController < ApplicationController
   before_action :authenticate_user!, except: %i[create discord discord_update summoner_name]
+  before_action :authenticate_bot!, only: %i[discord discord_update summoner_name]
   before_action :set_by_discord, only: %i[discord discord_update]
 
   def index

@@ -14,6 +14,12 @@ class ApplicationController < ActionController::API
     render(body: nil, status: :forbidden) && return if @current_user.nil?
   end
 
+  def authenticate_bot!
+    if request.headers['HTTP_AUTH_TOKEN'].nil? || request.headers['HTTP_AUTH_TOKEN'] != ENV['DISCORD_BOT_KEY']
+      render(body: nil, status: :forbidden) && return 
+    end
+  end
+
   private
 
   def render_404
