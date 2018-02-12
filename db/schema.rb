@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171222130000) do
+ActiveRecord::Schema.define(version: 20180210154909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,15 @@ ActiveRecord::Schema.define(version: 20171222130000) do
     t.index ["user_id"], name: "index_devices_on_user_id"
   end
 
+  create_table "discord_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "communication_datum_id"
+    t.uuid "league_profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["communication_datum_id"], name: "index_discord_users_on_communication_datum_id"
+    t.index ["league_profile_id"], name: "index_discord_users_on_league_profile_id"
+  end
+
   create_table "league_matches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "swiper_id"
     t.uuid "target_id"
@@ -53,20 +62,39 @@ ActiveRecord::Schema.define(version: 20171222130000) do
     t.index ["league_profile_id"], name: "index_league_messages_on_league_profile_id"
   end
 
+  create_table "league_positions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "league_profile_id"
+    t.string "rank"
+    t.string "queue_type"
+    t.boolean "hot_streak"
+    t.integer "wins"
+    t.boolean "veteran"
+    t.integer "losses"
+    t.boolean "fresh_blood"
+    t.string "league_id"
+    t.string "player_or_team_name"
+    t.boolean "inactive"
+    t.string "player_or_team_id"
+    t.string "league_name"
+    t.string "tier"
+    t.integer "league_points"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "league_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "summoner_name"
     t.string "summoner_id"
     t.string "region"
-    t.text "ranked_data"
-    t.string "roles"
-    t.string "goals"
-    t.string "champions"
     t.datetime "riot_updated_at"
     t.uuid "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "locales", default: "--- []\n"
     t.string "description", default: ""
+    t.text "champions", default: [], array: true
+    t.text "goals", default: [], array: true
+    t.text "locales", default: [], array: true
+    t.text "roles", default: [], array: true
     t.index ["user_id"], name: "index_league_profiles_on_user_id"
   end
 
@@ -78,6 +106,13 @@ ActiveRecord::Schema.define(version: 20171222130000) do
     t.datetime "updated_at", null: false
     t.index ["swiper_id"], name: "index_league_responses_on_swiper_id"
     t.index ["target_id"], name: "index_league_responses_on_target_id"
+  end
+
+  create_table "lfg_league_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "league_profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_profile_id"], name: "index_lfg_league_profiles_on_league_profile_id"
   end
 
   create_table "notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -109,4 +144,7 @@ ActiveRecord::Schema.define(version: 20171222130000) do
   end
 
   add_foreign_key "communication_data", "users"
+  add_foreign_key "discord_users", "communication_data"
+  add_foreign_key "discord_users", "league_profiles"
+  add_foreign_key "lfg_league_profiles", "league_profiles"
 end

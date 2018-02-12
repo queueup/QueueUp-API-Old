@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class CommunicationDataController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_communication_datum, only: [:show, :update, :destroy]
+  before_action :set_communication_datum, only: %i[update]
 
   def index
     @communication_data = @current_user.communication_data
@@ -17,11 +19,12 @@ class CommunicationDataController < ApplicationController
   end
 
   private
-    def set_communication_datum
-      @communication_datum = CommunicationDatum.where(user: @current_user, type: params[:id]).first_or_create
-    end
 
-    def communication_datum_params
-      params.permit(:value)
-    end
+  def set_communication_datum
+    @communication_datum = CommunicationDatum.where(user: @current_user, type: params[:id]).first_or_create
+  end
+
+  def communication_datum_params
+    params.permit(:value)
+  end
 end

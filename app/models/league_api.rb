@@ -1,101 +1,105 @@
+# frozen_string_literal: true
+
 class LeagueApi
   attr_accessor :region, :ranked_data, :summoner_name, :summoner_id, :champions
 
-  def initialize(props = {})
+  def initialize(props={})
     @summoner_name = props[:summoner_name]
     @region = props[:region]
     @endpoint = get_region_endpoint(@region)
-    @summoner_id = props[:summoner_id] || get_summoner_id
+    @summoner_id = props[:summoner_id] || fetch_summoner_id
   end
 
-  def get_ranked_data
+  def fetch_ranked_data
     @ranked_data = request_api "lol/league/v3/positions/by-summoner/#{@summoner_id}" unless @summoner_id.nil?
   end
 
-  def get_champions
-    unless @summoner_id.nil?
-      @champions = request_api "lol/champion-mastery/v3/champion-masteries/by-summoner/#{@summoner_id}"
-      @champions = @champions[0..4].pluck("championId") unless @champions.nil?
-    end
+  def fetch_champions
+    return if @summoner_id.nil?
+    @champions = request_api "lol/champion-mastery/v3/champion-masteries/by-summoner/#{@summoner_id}"
+    Rails.logger.error @champions
+    @champions = @champions[0..4].pluck('championId') unless @champions.nil?
   end
 
   private
-  def get_summoner_id
+
+  def fetch_summoner_id
     response = request_api "lol/summoner/v3/summoners/by-name/#{@summoner_name}"
-    @summoner_id = response["id"] unless response.nil? || response["id"].nil?
+    @summoner_id = response['id'] unless response.nil? || response['id'].nil?
   end
 
   def get_region_endpoint(region)
     regions = [
       {
-        region: 'BR',
+        region:   'BR',
         platform:	'BR1',
         endpoint:	'br1.api.riotgames.com'
       },
       {
-        region: 'EUNE',
+        region:   'EUNE',
         platform:	'EUN1',
         endpoint:	'eun1.api.riotgames.com'
       },
       {
-        region: 'EUW',
+        region:   'EUW',
         platform:	'EUW1',
         endpoint:	'euw1.api.riotgames.com'
       },
       {
-        region: 'JP',
+        region:   'JP',
         platform:	'JP1',
         endpoint:	'jp1.api.riotgames.com'
       },
       {
-        region: 'KR',
+        region:   'KR',
         platform:	'KR',
         endpoint:	'kr.api.riotgames.com'
       },
       {
-        region: 'LAN',
+        region:   'LAN',
         platform:	'LA1',
         endpoint:	'la1.api.riotgames.com'
       },
       {
-        region: 'LAS',
+        region:   'LAS',
         platform:	'LA2',
         endpoint:	'la2.api.riotgames.com'
       },
       {
-        region: 'NA',
+        region:   'NA',
         platform:	'NA1',
         endpoint:	'na1.api.riotgames.com'
       },
       {
-        region: 'OCE',
+        region:   'OCE',
         platform:	'OC1',
         endpoint:	'oc1.api.riotgames.com'
       },
       {
-        region: 'TR',
+        region:   'TR',
         platform:	'TR1',
         endpoint:	'tr1.api.riotgames.com'
       },
       {
-        region: 'RU',
+        region:   'RU',
         platform:	'RU',
         endpoint:	'ru.api.riotgames.com'
       },
       {
-        region: 'PBE',
+        region:   'PBE',
         platform:	'PBE1',
         endpoint:	'pbe1.api.riotgames.com'
       }
     ]
-    regions.select { |r| r[:region].downcase == region.downcase }.first[:endpoint] unless region.nil?
+    regions.select {|r| r[:region].casecmp(region.downcase).zero? }.first[:endpoint] unless region.nil?
   end
 
   def request_api(req)
     if @endpoint.nil?
       nil
     else
-      response = HTTParty.get(URI::encode("https://#{@endpoint}/#{req}"), headers: {"X-Riot-Token" => ENV['RIOT_API_KEY']})
+      response = HTTParty.get(URI.encode("https://#{@endpoint}/#{req}"),
+                              headers: {'X-Riot-Token' => ENV['RIOT_API_KEY']})
       JSON.parse(response.body)
     end
   end

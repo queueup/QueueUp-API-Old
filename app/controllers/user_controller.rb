@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class UserController < ApplicationController
-  before_action :authenticate_user!, only: [:update_password, :validate_token]
+  before_action :authenticate_user!, only: %i[update_password validate_token]
 
   def sign_up
     user = User.new(email: params[:email], password: params[:password], password_confirmation: params[:password])
@@ -13,7 +15,7 @@ class UserController < ApplicationController
 
   def sign_in
     user = User.find_by(email: params[:email])
-    if user && user.valid_password?(params[:password])
+    if user&.valid_password?(params[:password])
       user.access_token = user.sign_in
       render json: user, serializer: SignInSerializer
     else
@@ -21,8 +23,7 @@ class UserController < ApplicationController
     end
   end
 
-  def validate_token
-  end
+  def validate_token; end
 
   def update_password
     if @current_user.valid_password?(params[:current_password])

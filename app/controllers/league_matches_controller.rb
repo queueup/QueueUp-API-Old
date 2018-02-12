@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LeagueMatchesController < ApplicationController
   before_action :authenticate_user!
 
@@ -6,8 +8,8 @@ class LeagueMatchesController < ApplicationController
       .left_outer_joins(:league_messages)
       .group('league_matches.id, league_messages.created_at')
       .order('GREATEST(league_messages.created_at, league_matches.created_at) DESC')
-      .uniq { |match| match.id }, scope: {
-      current_user: @current_user
-    }
+                              .uniq(&:id), scope: {
+                                current_user: @current_user
+                              }
   end
 end

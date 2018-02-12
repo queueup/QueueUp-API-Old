@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :league_message do
-    content { FFaker::Lorem.paragraph }
+    content { Faker::Lorem.paragraph }
 
     league_match
     league_profile
