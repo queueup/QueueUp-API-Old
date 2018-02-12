@@ -10,14 +10,14 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_user
-    return if request.headers['HTTP_AUTH_UID'].nil? && request.headers['HTTP_AUTH_TOKEN'].nil?
+    return if request.headers['HTTP_AUTH_UID'].nil? || request.headers['HTTP_AUTH_TOKEN'].nil?
     user = User.find_by(email: request.headers['HTTP_AUTH_UID'])
     return if user.nil? || user.tokens.select {|t| t[:key] == request.headers['HTTP_AUTH_TOKEN'] }.empty?
     @current_user = user
   end
 
   def authenticate_bot!
-    return if request.headers['HTTP_AUTH_TOKEN'].nil? || request.headers['HTTP_AUTH_TOKEN'] != ENV['DISCORD_BOT_KEY']
+    return if !request.headers['HTTP_AUTH_TOKEN'].nil? && request.headers['HTTP_AUTH_TOKEN'] == ENV['DISCORD_BOT_KEY']
     render(body: nil, status: :forbidden) && return
   end
 
