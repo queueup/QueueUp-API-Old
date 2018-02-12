@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LeagueProfile < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
   has_many :league_positions, dependent: :destroy
 
   after_initialize :set_default_values
@@ -14,7 +14,7 @@ class LeagueProfile < ApplicationRecord
   validates :region, presence: true
 
   def update_ranked_data
-    # return self.league_positions if self.riot_updated_at > Time.zone.now - 1.day
+    # return league_positions if riot_updated_at > Time.zone.now - 1.day
 
     league_positions.destroy_all # Destroy the old records
 
@@ -30,6 +30,18 @@ class LeagueProfile < ApplicationRecord
 
   def league_matches
     LeagueMatch.where('swiper_id = ? OR target_id = ?', id, id)
+  end
+
+  def self.custom_find_by_discord(discord_tag)
+    DiscordUser.custom_find_by_discord(discord_tag)&.league_profile
+  end
+
+  def self.custom_find_by_summoner(region, summoner_name)
+    lp = LeagueProfile.where(
+      'LOWER(summoner_name) = ? AND LOWER(region) = ?', summoner_name.downcase, region.downcase
+    ).first_or_create(region: region, summoner_name: summoner_name)
+    lp.reload
+    lp
   end
 
   private

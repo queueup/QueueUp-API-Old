@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::API
   before_action :set_raven_context
+  rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
   def authenticate_user!
     unless request.headers['HTTP_AUTH_UID'].nil? || request.headers['HTTP_AUTH_TOKEN'].nil?
@@ -13,7 +14,17 @@ class ApplicationController < ActionController::API
     render(body: nil, status: :forbidden) && return if @current_user.nil?
   end
 
+  def authenticate_bot!
+    if request.headers['HTTP_AUTH_TOKEN'].nil? || request.headers['HTTP_AUTH_TOKEN'] != ENV['DISCORD_BOT_KEY']
+      render(body: nil, status: :forbidden) && return 
+    end
+  end
+
   private
+
+  def render_404
+    render nothing: true, status: :not_found
+  end
 
   def set_raven_context
     return unless Rails.env.production?

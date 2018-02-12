@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     delete :destroy, on: :collection
   end
 
+  resources :discord_users, only: %i[show update]
+
   resources :notifications, only: [] do
     delete :destroy, on: :collection
   end
@@ -21,10 +23,16 @@ Rails.application.routes.draw do
   resources :league_matches, only: [:index]
   resources :league_messages, only: %i[create show]
 
+  get 'league_profiles/by_discord/:id', to: 'league_profiles#discord'
+  patch 'league_profiles/by_discord/:id/ranked_data', to: 'league_profiles#discord_update'
+  get 'league_profiles/by_summoner_name/:region/:summoner_name', to: 'league_profiles#summoner_name'
   resources :league_profiles, only: %i[index create show] do
     patch :update,      on: :collection
     patch :ranked_data, on: :collection
   end
+
+  post 'lfg_league_profiles/by_discord/:id', to: 'lfg_league_profiles#discord'
+  resources :lfg_league_profiles, only: [:index]
 
   resources :league_suggestions, only: [:index] do
     patch :accept, on: :member

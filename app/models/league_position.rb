@@ -4,7 +4,7 @@ class LeaguePosition < ApplicationRecord
   belongs_to :league_profile
 
   def self.create_from_ranked_data(ranked_data, id)
-    ranked_data.each {|data|
+    ranked_data.map {|data|
       LeaguePosition.create(
         league_profile_id:   id,
         rank:                data['rank'],

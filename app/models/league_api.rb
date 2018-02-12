@@ -17,6 +17,7 @@ class LeagueApi
   def fetch_champions
     return if @summoner_id.nil?
     @champions = request_api "lol/champion-mastery/v3/champion-masteries/by-summoner/#{@summoner_id}"
+    Rails.logger.error @champions
     @champions = @champions[0..4].pluck('championId') unless @champions.nil?
   end
 
