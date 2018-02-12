@@ -2,6 +2,7 @@
 
 class LeagueProfilesController < ApplicationController
   before_action :authenticate_user!, except: %i[create discord discord_update summoner_name]
+  before_action :authenticate_user, only: :create
   before_action :authenticate_bot!, only: %i[discord discord_update summoner_name]
   before_action :set_by_discord, only: %i[discord discord_update]
 
@@ -15,8 +16,7 @@ class LeagueProfilesController < ApplicationController
 
   def create
     @league_profile = LeagueProfile.where(
-      summoner_name: params[:summoner_name],
-      region:        params[:region]
+      'LOWER(summoner_name) = LOWER(?) AND LOWER(region) = LOWER(?)', params[:summoner_name], params[:region]
     ).first_or_create
 
     @league_profile.user = @current_user if @league_profile.user.nil? && !@current_user.nil?

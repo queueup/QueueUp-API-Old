@@ -5,19 +5,20 @@ class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
   def authenticate_user!
-    unless request.headers['HTTP_AUTH_UID'].nil? || request.headers['HTTP_AUTH_TOKEN'].nil?
-      user = User.find_by(email: request.headers['HTTP_AUTH_UID'])
-      if !user.nil? && !user.tokens.select {|t| t[:key] == request.headers['HTTP_AUTH_TOKEN'] }.empty?
-        @current_user = user
-      end
-    end
+    authenticate_user
     render(body: nil, status: :forbidden) && return if @current_user.nil?
   end
 
+  def authenticate_user
+    return if request.headers['HTTP_AUTH_UID'].nil? && request.headers['HTTP_AUTH_TOKEN'].nil?
+    user = User.find_by(email: request.headers['HTTP_AUTH_UID'])
+    return if user.nil? || user.tokens.select {|t| t[:key] == request.headers['HTTP_AUTH_TOKEN'] }.empty?
+    @current_user = user
+  end
+
   def authenticate_bot!
-    if request.headers['HTTP_AUTH_TOKEN'].nil? || request.headers['HTTP_AUTH_TOKEN'] != ENV['DISCORD_BOT_KEY']
-      render(body: nil, status: :forbidden) && return 
-    end
+    return if request.headers['HTTP_AUTH_TOKEN'].nil? || request.headers['HTTP_AUTH_TOKEN'] != ENV['DISCORD_BOT_KEY']
+    render(body: nil, status: :forbidden) && return
   end
 
   private
