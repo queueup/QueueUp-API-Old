@@ -13,7 +13,7 @@ class DiscordUser < ApplicationRecord
       datum = cd.first_or_create
     end
     if datum.discord_user.nil?
-      DiscordUser.create(communication_datum: datum)
+      DiscordUser.create(communication_datum: datum, league_profile: datum.user&.league_profile)
     else
       datum.discord_user
     end
