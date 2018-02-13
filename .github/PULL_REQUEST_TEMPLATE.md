@@ -1,4 +1,4 @@
-###  :gift: Description
+### :gift: Description
 I created the pull request to...
 
 ### :rotating_light: Checklist
