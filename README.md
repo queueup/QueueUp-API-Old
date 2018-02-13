@@ -1,4 +1,4 @@
-[[https://github.com/queueup/queueup-api/blob/master/docs/img/logo.png|alt=logo]]
+![Logo][docs/img/logo.png]
 
 [![Build Status](https://travis-ci.org/queueup/QueueUp-API.svg)](https://travis-ci.org/queueup/QueueUp-API) [![Maintainability](https://api.codeclimate.com/v1/badges/d1f2aab9042eb543b61a/maintainability)](https://codeclimate.com/github/queueup/QueueUp-API/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/d1f2aab9042eb543b61a/test_coverage)](https://codeclimate.com/github/queueup/QueueUp-API/test_coverage) [![Discord](https://img.shields.io/discord/374509692950544387.svg)](http://discord.gg/Zk2fsnN)
 
