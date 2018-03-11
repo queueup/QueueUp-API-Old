@@ -11,6 +11,10 @@ class LeagueProfileSerializer < ActiveModel::Serializer
              :description,
              :ranked_data,
              :riot_updated_at
+  
+  def champions
+    object.champions.map(&:to_i)
+  end
 
   def ranked_data
     ActiveModelSerializers::SerializableResource.new(
