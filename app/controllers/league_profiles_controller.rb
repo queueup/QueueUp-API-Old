@@ -7,11 +7,19 @@ class LeagueProfilesController < ApplicationController
   before_action :set_by_discord, only: %i[discord discord_update]
 
   def index
-    render json: @current_user.league_profile
+    if @current_user.league_profile
+      render json: @current_user.league_profile, serializer: LeagueSuggestionSerializer
+    else
+      render nothing: true, status: :not_found
+    end
   end
 
   def show
-    render json: @current_user.league_profile, serializer: LeagueSuggestionSerializer
+    if @current_user.league_profile
+      render json: @current_user.league_profile, serializer: LeagueSuggestionSerializer
+    else
+      render nothing: true, status: :not_found
+    end
   end
 
   def create

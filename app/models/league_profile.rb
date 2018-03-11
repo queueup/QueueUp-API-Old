@@ -5,8 +5,7 @@ class LeagueProfile < ApplicationRecord
   has_many :league_positions, dependent: :destroy
 
   after_initialize :set_default_values
-  before_validation :set_api_summoner
-  before_create :set_initial_data
+  before_validation :set_api_summoner, on: :create
   after_create :update_ranked_data
 
   validates :summoner_name, presence: true, uniqueness: true
@@ -49,18 +48,12 @@ class LeagueProfile < ApplicationRecord
   def set_api_summoner
     l = LeagueApi.new(
       summoner_name: summoner_name,
-      region:        region,
-      summoner_id:   summoner_id
+      region:        region
     )
-    self.summoner_id ||= l.summoner_id
-  end
-
-  def set_initial_data
-    l = LeagueApi.new(
-      summoner_name: summoner_name,
-      region:        region,
-      summoner_id:   self.summoner_id
-    )
+    self.summoner_id = l.summoner_id
+    self.summoner_name = l.summoner_name
+    self.profile_icon_id = l.profile_icon_id
+    self.summoner_level = l.summoner_level
     self.riot_updated_at = Time.zone.now
     self.champions = l.fetch_champions
   end

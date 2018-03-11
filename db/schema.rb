@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180210154909) do
+ActiveRecord::Schema.define(version: 20180301181041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,8 @@ ActiveRecord::Schema.define(version: 20180210154909) do
     t.text "goals", default: [], array: true
     t.text "locales", default: [], array: true
     t.text "roles", default: [], array: true
+    t.integer "profile_icon_id", default: 0
+    t.integer "summoner_level", default: 0
     t.index ["user_id"], name: "index_league_profiles_on_user_id"
   end
 

@@ -1,13 +1,23 @@
 # frozen_string_literal: true
 
 class LeagueApi
-  attr_accessor :region, :ranked_data, :summoner_name, :summoner_id, :champions
+  attr_accessor :region,
+  :ranked_data,
+  :summoner_name,
+  :summoner_id,
+  :summoner_level,
+  :champions,
+  :profile_icon_id
 
   def initialize(props={})
     @summoner_name = props[:summoner_name]
     @region = props[:region]
     @endpoint = get_region_endpoint(@region)
-    @summoner_id = props[:summoner_id] || fetch_summoner_id
+    if props[:summoner_id].nil?
+      fetch_summoner_id
+    else
+      @summoner_id = props[:summoner_id]
+    end
   end
 
   def fetch_ranked_data
@@ -17,15 +27,19 @@ class LeagueApi
   def fetch_champions
     return if @summoner_id.nil?
     @champions = request_api "lol/champion-mastery/v3/champion-masteries/by-summoner/#{@summoner_id}"
-    Rails.logger.error @champions
     @champions = @champions[0..4].pluck('championId') unless @champions.nil?
+    @champions
   end
 
   private
 
   def fetch_summoner_id
     response = request_api "lol/summoner/v3/summoners/by-name/#{@summoner_name}"
-    @summoner_id = response['id'] unless response.nil? || response['id'].nil?
+    return if response.nil? || response['id'].nil? || response['profileIconId'].nil?
+    @profile_icon_id = response['profileIconId']
+    @summoner_level = response['summonerLevel']
+    @summoner_name = response['name']
+    @summoner_id = response['id']
   end
 
   def get_region_endpoint(region)

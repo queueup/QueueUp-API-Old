@@ -18,7 +18,7 @@ class ApplicationController < ActionController::API
 
   def authenticate_bot!
     return if !request.headers['HTTP_AUTH_TOKEN'].nil? && request.headers['HTTP_AUTH_TOKEN'] == ENV['DISCORD_BOT_KEY']
-    render(body: nil, status: :forbidden) && return
+    authenticate_user!
   end
 
   private

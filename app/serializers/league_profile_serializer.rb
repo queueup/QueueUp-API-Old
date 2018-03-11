@@ -8,9 +8,12 @@ class LeagueProfileSerializer < ActiveModel::Serializer
              :roles,
              :goals,
              :locales,
+             :profile_icon_id,
+             :summoner_level,
              :description,
              :ranked_data,
-             :riot_updated_at
+             :riot_updated_at,
+             :user_id
 
   def ranked_data
     ActiveModelSerializers::SerializableResource.new(
