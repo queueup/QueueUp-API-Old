@@ -45,8 +45,7 @@ class LeagueProfilesController < ApplicationController
   end
 
   def ranked_data
-    league_profile.update_ranked_data
-    if league_profile.save
+    if league_profile.update_ranked_data
       render json: league_profile, include: 'league_profiles'
     else
       render json: league_profile.errors, status: :unprocessable_entity
@@ -58,8 +57,7 @@ class LeagueProfilesController < ApplicationController
   end
 
   def discord_update
-    @league_profile.update_ranked_data
-    if @league_profile.save
+    if @league_profile.update_ranked_data
       render json: @league_profile, include: 'league_profiles'
     else
       render json: @league_profile.errors, status: :unprocessable_entity

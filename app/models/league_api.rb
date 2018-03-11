@@ -2,12 +2,12 @@
 
 class LeagueApi
   attr_accessor :region,
-  :ranked_data,
-  :summoner_name,
-  :summoner_id,
-  :summoner_level,
-  :champions,
-  :profile_icon_id
+                :ranked_data,
+                :summoner_name,
+                :summoner_id,
+                :summoner_level,
+                :champions,
+                :profile_icon_id
 
   def initialize(props={})
     @summoner_name = props[:summoner_name]
