@@ -23,9 +23,7 @@ class LeagueProfilesController < ApplicationController
   end
 
   def create
-    @league_profile = LeagueProfile.where(
-      'LOWER(summoner_name) = LOWER(?) AND LOWER(region) = LOWER(?)', params[:summoner_name], params[:region]
-    ).first_or_create
+    @league_profile = LeagueProfile.custom_find_by_summoner(params[:region], params[:summoner_name])
 
     @league_profile.user = @current_user if @league_profile.user.nil? && !@current_user.nil?
 
